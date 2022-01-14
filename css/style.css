@@ -1,0 +1,13 @@
+html,
+body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    align-items: center;
+}
+
+main {
+    max-width: 400px;
+}

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+            crossorigin="anonymous"
+        />
+        <link rel="stylesheet" href="css/style.css" />
+    </head>
+    <body class="text-center">
+        <main class="m-auto">
+            <div class="data">Her kommer det noe tekst</div>
+            <button class="btn btn-primary" onclick="getRandomWord()">Bytt ord</button>
+        </main>
+
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+            crossorigin="anonymous"
+        ></script>
+        <script>
+            const randomWordUrl = "https://random-word-api.herokuapp.com/word?number=1";
+
+            async function getRandomWord() {
+                try {
+                    const response = await fetch(randomWordUrl);
+                    const randomWord = await response.json();
+                    console.log(randomWord);
+
+                    const defUrl = "https://api.dictionaryapi.dev/api/v2/entries/en/" + randomWord;
+
+                    async function getDefinition() {
+                        try {
+                            const response = await fetch(defUrl);
+                            const info = await response.json();
+
+                            const word = document.querySelector(".data");
+
+                            word.innerHTML = `
+                        <h1 class="mb-3 fw-normal">${info[0].word}</h1> 
+                        <p class="mb-3 fw-normal">${info[0].meanings[0].definitions[0].definition}</p>
+                    `;
+                        } catch (error) {
+                            const word = document.querySelector(".data");
+
+                            word.innerHTML = `
+                        <h1 class="mb-3 fw-normal">Sorry, rotet det til... </h1> 
+                        <p class="mb-3 fw-normal">Prøv å trykk en gang til :)</p>
+                    `;
+                        }
+                    }
+                    getDefinition();
+                } catch (error) {
+                    const word = document.querySelector(".data");
+
+                    word.innerHTML = `
+                <h1 class="mb-3 fw-normal">Sorry, rotet det til... </h1> 
+                <p class="mb-3 fw-normal">Prøv å trykk en gang til :)</p>
+            `;
+                }
+            }
+            getRandomWord();
+        </script>
+    </body>
+</html>
